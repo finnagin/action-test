@@ -22,7 +22,7 @@ jobs:
     - name: Download target python
       run: |
         mkdir python-${{ matrix.python-version }}-${{ matrix.architecture }}
-        wget https://www.python.org/ftp/python/${{ matrix.python-version }}/python-${{ matrix.python-version }}-${{ matrix.architecture }}.exe
+        Invoke-WebRequest https://www.python.org/ftp/python/${{ matrix.python-version }}/python-${{ matrix.python-version }}-${{ matrix.architecture }}.exe
         .\python-${{ matrix.python-version }}-${{ matrix.architecture }}.exe /quiet TargetDir="python-${{ matrix.python-version }}-${{ matrix.architecture }}"
     
 
