@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.11"]
+        python-version: ["3.11.2"]
         architecture: ["x64", "arm64"]
 
     timeout-minutes: 30
@@ -19,14 +19,12 @@ jobs:
     name: Python ${{ matrix.python-version }} ${{ matrix.architecture }}
 
     steps:
-    # sets env: pythonLocation
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-        architecture: ${{ matrix.architecture }}
-        cache: pip
-        cache-dependency-path: ".github/workflows/test-windows.yml"
+    - name: Download target python
+      run: |
+        mkdir python-{{ matrix.python-version }}-${{ matrix.architecture }}
+        wget https://www.python.org/ftp/python/{{ matrix.python-version }}/python-{{ matrix.python-version }}-${{ matrix.architecture }}.exe
+        .\python-{{ matrix.python-version }}-${{ matrix.architecture }}.exe /quiet TargetDir="python-{{ matrix.python-version }}-${{ matrix.architecture }}"
+    
 
     - name: Print build system information
       run: python3 .github/workflows/system-info.py
