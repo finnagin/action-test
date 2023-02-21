@@ -19,6 +19,9 @@ jobs:
     name: Python ${{ matrix.python-version }} ${{ matrix.architecture }}
 
     steps:
+    - name: Checkout action-test
+      uses: actions/checkout@v3
+    
     - name: Download target python
       run: |
         Invoke-WebRequest https://www.python.org/ftp/python/${{ matrix.python-version }}/python-${{ matrix.python-version }}-embed-${{ matrix.architecture }}.zip  -OutFile $PWD\python-${{ matrix.python-version }}-${{ matrix.architecture }}.zip
