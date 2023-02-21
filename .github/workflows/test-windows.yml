@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.11.2"]
-        architecture: ["x64", "arm64"]
+        architecture: ["amd64", "arm64"]
 
     timeout-minutes: 30
 
@@ -21,9 +21,8 @@ jobs:
     steps:
     - name: Download target python
       run: |
-        mkdir python-${{ matrix.python-version }}-${{ matrix.architecture }}
-        Invoke-WebRequest https://www.python.org/ftp/python/${{ matrix.python-version }}/python-${{ matrix.python-version }}-${{ matrix.architecture }}.exe
-        .\python-${{ matrix.python-version }}-${{ matrix.architecture }}.exe /quiet TargetDir="python-${{ matrix.python-version }}-${{ matrix.architecture }}"
+        Invoke-WebRequest https://www.python.org/ftp/python/${{ matrix.python-version }}/python-${{ matrix.python-version }}-embed-${{ matrix.architecture }}.zip
+        Expand-Archive python-${{ matrix.python-version }}-embed-${{ matrix.architecture }}.zip -DestinationPath python-${{ matrix.python-version }}-${{ matrix.architecture }}
     
 
     - name: Print build system information
