@@ -21,8 +21,8 @@ jobs:
     steps:
     - name: Download target python
       run: |
-        Invoke-WebRequest https://www.python.org/ftp/python/${{ matrix.python-version }}/python-${{ matrix.python-version }}-embed-${{ matrix.architecture }}.zip
-        Expand-Archive $PWD\python-${{ matrix.python-version }}-embed-${{ matrix.architecture }}.zip -DestinationPath $PWD\python-${{ matrix.python-version }}-${{ matrix.architecture }}
+        Invoke-WebRequest https://www.python.org/ftp/python/${{ matrix.python-version }}/python-${{ matrix.python-version }}-embed-${{ matrix.architecture }}.zip  -OutFile $PWD\python-${{ matrix.python-version }}-${{ matrix.architecture }}.zip
+        Expand-Archive $PWD\python-${{ matrix.python-version }}-${{ matrix.architecture }}.zip -DestinationPath $PWD\python-${{ matrix.python-version }}-${{ matrix.architecture }}
     
 
     - name: Print build system information
