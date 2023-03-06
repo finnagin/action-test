@@ -21,16 +21,43 @@ jobs:
     steps:
     - name: Checkout action-test
       uses: actions/checkout@v3
+      
+    - name: Checkout pillow
+      uses: actions/checkout@v3
+      with:
+        repository: python-pillow/pillow
+        path: .
+    
+    - name: Checkout cached dependencies
+      uses: actions/checkout@v3
+      with:
+        repository: python-pillow/pillow-depends
+        path: winbuild\depends
+
+    - name: Checkout extra test images
+      uses: actions/checkout@v3
+      with:
+        repository: python-pillow/test-images
+        path: Tests\test-images
+
+    # sets env: pythonLocation
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        architecture: "x64"
+        cache: pip
+        cache-dependency-path: ".github/workflows/arm-windows.yml"
     
     - name: Setup NuGet
       uses: nuget/setup-nuget@v1
       with:
         nuget-version: 'latest'
     
-    - name: install python
+    - name: install arm64 python
       run: |
         mkdir pythonarm
-        nuget install pythonarm64 -Version 3.11.2 -OutputDirectory .\pythonarm
+        nuget install pythonarm64 -Version ${{ matrix.python-version }} -OutputDirectory .\pythonarm
     
     #- name: Download target python
     #  run: |
@@ -70,7 +97,7 @@ jobs:
     - name: Prepare build
       if: steps.build-cache.outputs.cache-hit != 'true'
       run: |
-        & python.exe winbuild\build_prepare.py -v --python=$env:pythonLocation --srcdir
+        & python.exe winbuild\build_prepare.py -v --python=.\pythonarm --architecture=ARM64 --srcdir
       shell: pwsh
 
     - name: Build dependencies / libjpeg-turbo
