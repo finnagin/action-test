@@ -11,8 +11,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.11.2"]
-        architecture: ["amd64", "arm64"]
+        /: ["3.11.2"]
+        architecture: ["arm64"]
 
     timeout-minutes: 30
 
@@ -22,10 +22,20 @@ jobs:
     - name: Checkout action-test
       uses: actions/checkout@v3
     
-    - name: Download target python
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v1
+      with:
+        nuget-version: 'latest'
+    
+    - name: install python
       run: |
-        Invoke-WebRequest https://www.python.org/ftp/python/${{ matrix.python-version }}/python-${{ matrix.python-version }}-embed-${{ matrix.architecture }}.zip  -OutFile $PWD\python-${{ matrix.python-version }}-${{ matrix.architecture }}.zip
-        Expand-Archive $PWD\python-${{ matrix.python-version }}-${{ matrix.architecture }}.zip -DestinationPath $PWD\python-${{ matrix.python-version }}-${{ matrix.architecture }}
+        mkdir pythonarm
+        nuget install install pythonarm64 -Version 3.11.2 -OutputDirectory .\pythonarm
+    
+    #- name: Download target python
+    #  run: |
+    #    Invoke-WebRequest https://www.python.org/ftp/python/${{ matrix.python-version }}/python-${{ matrix.python-version }}-embed-${{ matrix.architecture }}.zip  -OutFile $PWD\python-${{ matrix.python-version }}-${{ matrix.architecture }}.zip
+    #    Expand-Archive $PWD\python-${{ matrix.python-version }}-${{ matrix.architecture }}.zip -DestinationPath $PWD\python-${{ matrix.python-version }}-${{ matrix.architecture }}
     
 
     - name: Print build system information
