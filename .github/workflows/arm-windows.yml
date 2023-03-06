@@ -46,8 +46,8 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
         architecture: "x64"
-        cache: pip
-        cache-dependency-path: ".github/workflows/arm-windows.yml"
+#         cache: pip
+#         cache-dependency-path: ".github/workflows/arm-windows.yml"
     
     - name: Setup NuGet
       uses: nuget/setup-nuget@v1
