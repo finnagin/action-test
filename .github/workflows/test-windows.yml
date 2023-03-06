@@ -30,7 +30,7 @@ jobs:
     - name: install python
       run: |
         mkdir pythonarm
-        nuget install install pythonarm64 -Version 3.11.2 -OutputDirectory .\pythonarm
+        nuget install pythonarm64 -Version 3.11.2 -OutputDirectory .\pythonarm
     
     #- name: Download target python
     #  run: |
