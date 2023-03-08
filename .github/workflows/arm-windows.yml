@@ -43,7 +43,7 @@ jobs:
         python setup.py build_ext -L  .\pythonarm64.${{ matrix.python-version }}\tools\libs bdist_wheel -d .\package_wheel
     
     - name: Publish Wheel
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with: 
         name: package-wheel-arm64-${{ matrix.python-version }}
         path: package_wheel
