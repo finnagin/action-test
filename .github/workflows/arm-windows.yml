@@ -35,11 +35,16 @@ jobs:
     
     - name: install arm64 python
       run: |
-        mkdir pythonarm
-        echo ${ GITHUB_WORKSPACE }
+        echo ${{GITHUB_WORKSPACE}}
         nuget install pythonarm64 -Version ${{ matrix.python-version }} -OutputDirectory .
-        tree ${ GITHUB_WORKSPACE }\pythonarm64.${{ matrix.python-version }} /F
+        tree .\pythonarm64.${{ matrix.python-version }} /F
         ls
+    
+    - name: Build Package
+      run: |
+        python -m pip install -U pip setuptools wheel
+        mkdir package_wheel
+        python setup.py build_ext -L  .\pythonarm64.${{ matrix.python-version }}\tools\libs bdist_wheel -d .\package_wheel
 
   success:
     permissions:
