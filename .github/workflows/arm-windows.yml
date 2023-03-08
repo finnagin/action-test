@@ -57,7 +57,9 @@ jobs:
     - name: install arm64 python
       run: |
         mkdir pythonarm
+        echo ${GITHUB_WORKSPACE}
         nuget install pythonarm64 -Version ${{ matrix.python-version }} -OutputDirectory .\pythonarm
+        tree pythonarm /F
     
     #- name: Download target python
     #  run: |
