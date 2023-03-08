@@ -38,7 +38,7 @@ jobs:
         mkdir pythonarm
         echo ${ GITHUB_WORKSPACE }
         nuget install pythonarm64 -Version ${{ matrix.python-version }} -OutputDirectory .
-        tree ${ GITHUB_WORKSPACE }\pythonarm${{ matrix.python-version }} /F
+        tree ${ GITHUB_WORKSPACE }\pythonarm64.${{ matrix.python-version }} /F
         ls
 
   success:
