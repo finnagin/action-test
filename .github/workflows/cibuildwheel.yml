@@ -1,0 +1,61 @@
+name: CIBuildWheel
+
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+
+    timeout-minutes: 30
+
+    name: Python ${{ matrix.python-version }} ${{ matrix.architecture }}
+
+    steps:
+    - name: Checkout action-test
+      uses: actions/checkout@v3
+      
+    - name: Checkout type_ast
+      uses: actions/checkout@v3
+      with:
+        repository: python/typed_ast
+        path: .
+    
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v1
+      with:
+        nuget-version: 'latest'
+    
+    - name: install arm64 python
+      run: nuget install pythonarm64 -Version ${{ matrix.python-version }} -OutputDirectory .
+    
+    - name: Build Package
+      run: |
+        python -m pip install -U pip setuptools wheel
+        python -m pip install cibuildwheel
+        mkdir package_wheel
+        cibuildwheel
+      env:
+        CIBW_BUILD: "cp311-* cp310-*"
+        CIBW_PLATFORM: "windows"
+        CIBW_ARCHS: "AMD64 x86 ARM64"
+    
+    - name: Publish Wheel
+      uses: actions/upload-artifact@v3
+      with: 
+        name: package-wheels
+        path: ./wheelhouse/*.whl
+
+  success:
+    permissions:
+      contents: none
+    needs: build
+    runs-on: ubuntu-latest
+    name: Windows Test Successful
+    steps:
+      - name: Success
+        run: echo Windows Test Successful
